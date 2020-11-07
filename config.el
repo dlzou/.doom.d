@@ -54,6 +54,10 @@
 ;; they are implemented.
 
 
+;; Set exec-path to $PATH
+(exec-path-from-shell-initialize)
+
+
 ;; Editor
 (whitespace-mode)
 (setq whitespace-style '(face tabs tab-mark spaces space-mark trailing lines-tail))
@@ -70,7 +74,6 @@
 
 
 ;; Visual elements
-(setq treemacs-width 30)
 (setq doom-themes-treemacs-theme "doom-colors")
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 14))
 

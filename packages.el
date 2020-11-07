@@ -48,3 +48,8 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+
+;; exec-path-from-shell
+(package! exec-path-from-shell
+  :recipe (:host github :repo "purcell/exec-path-from-shell"))
