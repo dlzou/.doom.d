@@ -59,9 +59,9 @@
 
 
 ;; Editor
+(blink-cursor-mode)
 (whitespace-mode)
 (setq whitespace-style '(face tabs tab-mark spaces space-mark trailing lines-tail))
-(blink-cursor-mode)
 
 
 ;; Global keybindings
@@ -74,8 +74,9 @@
 
 
 ;; Visual elements
-(setq doom-themes-treemacs-theme "doom-colors")
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 14))
+(setq doom-themes-treemacs-theme "doom-colors")
+(setq treemacs-width 30)
 
 
 ;; Config for treemacs
