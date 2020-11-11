@@ -50,6 +50,13 @@
 ;(unpin! t)
 
 
-;; exec-path-from-shell
-(package! exec-path-from-shell
-  :recipe (:host github :repo "purcell/exec-path-from-shell"))
+;; Load $PATH to exec-path
+(package! exec-path-from-shell)
+
+
+;; LSP-treemacs integration
+(package! lsp-treemacs)
+
+
+;; RISC-V mode
+(package! riscv-mode)

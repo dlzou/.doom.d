@@ -54,55 +54,50 @@
 ;; they are implemented.
 
 
-;; Set exec-path to $PATH
+;; Basic setup
 (exec-path-from-shell-initialize)
-
+(add-hook 'ibuffer-mode-hook
+          (lambda () (ibuffer-auto-mode)))
+(lsp-treemacs-sync-mode)
 
 ;; Editor
+(setq-default fill-column 100)
 (blink-cursor-mode)
 (global-whitespace-mode)
 (setq whitespace-style
-      '(face tabs tab-mark spaces space-mark trailing lines-tail))
+      '(face tabs tab-mark spaces space-mark lines-tail))
 
 
 ;; Global keybindings
-(defun my-forward-word ()
-  (interactive)
-  (if (looking-at "\\W*\n")
-      (progn
-        (forward-word)
-        (backward-word))
-    (forward-word)))
+(map! "C-f" #'forward-word
+      "C-b" #'backward-word
+      "M-f" #'forward-char
+      "M-b" #'backward-char)
 
-(defun my-backward-word ()
-  (interactive)
-  (if (looking-back "\n\\W*")
-      (progn
-        (backward-word)
-        (forward-word))
-    (backward-word)))
+(map! "C-z"   #'undo-fu-only-undo
+      "C-S-z" #'undo-fu-only-redo)
+(after! undo-fu
+  (map! :map undo-fu-mode-map "C-/" #'undo))
 
-(map! "C-f" 'my-forward-word
-      "C-b" 'my-backward-word
-      "M-f" 'forward-char
-      "M-b" 'backward-char)
+(map! "M-0"       #'treemacs-select-window
+      "C-x t t"   #'treemacs
+      "C-x t b"   #'treemacs-bookmark
+      "C-x t f"   #'treemacs-find-file
+      "C-x t C-f" #'treemacs-find-tag)
+
+(map! :map vterm-mode-map "C-c C-x" #'vterm-send-C-x)
 
 (windmove-default-keybindings 'control)
 
-(map! "C-z"   'undo-fu-only-undo
-      "C-S-z" 'undo-fu-only-redo)
-
-(with-eval-after-load "undo-fu-mode"
-  (define-key undo-fu-mode-map [remap undo] nil)
-  (define-key undo-fu-mode-map [remap redo] nil))
-
-(map! "M-0"       'treemacs-select-window
-      "C-x t t"   'treemacs
-      "C-x t b"   'treemacs-bookmark
-      "C-x t f"   'treemacs-find-file
-      "C-x t C-f" 'treemacs-find-tag)
-
 
 ;; Visual elements
+(setq doom-font (font-spec :family "Iosevka"))
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 13))
 (setq doom-themes-treemacs-theme "doom-colors")
+
+
+;; Anaconda
+(require 'conda)
+(custom-set-variables
+ '(conda-anaconda-home (expand-file-name "~/anaconda3/")))
+(setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
