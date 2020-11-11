@@ -60,40 +60,49 @@
 
 ;; Editor
 (blink-cursor-mode)
-(whitespace-mode)
-(setq whitespace-style '(face tabs tab-mark spaces space-mark trailing lines-tail))
+(global-whitespace-mode)
+(setq whitespace-style
+      '(face tabs tab-mark spaces space-mark trailing lines-tail))
 
 
 ;; Global keybindings
+(defun my-forward-word ()
+  (interactive)
+  (if (looking-at "\\W*\n")
+      (progn
+        (forward-word)
+        (backward-word))
+    (forward-word)))
+
+(defun my-backward-word ()
+  (interactive)
+  (if (looking-back "\n\\W*")
+      (progn
+        (backward-word)
+        (forward-word))
+    (backward-word)))
+
+(map! "C-f" 'my-forward-word
+      "C-b" 'my-backward-word
+      "M-f" 'forward-char
+      "M-b" 'backward-char)
+
 (windmove-default-keybindings 'control)
-(global-set-key (kbd "C-z") 'undo-fu-only-undo)
-(global-set-key (kbd "C-S-z") 'undo-fu-only-redo)
+
+(map! "C-z"   'undo-fu-only-undo
+      "C-S-z" 'undo-fu-only-redo)
+
 (with-eval-after-load "undo-fu-mode"
   (define-key undo-fu-mode-map [remap undo] nil)
   (define-key undo-fu-mode-map [remap redo] nil))
 
+(map! "M-0"       'treemacs-select-window
+      "C-x t t"   'treemacs
+      "C-x t b"   'treemacs-bookmark
+      "C-x t f"   'treemacs-find-file
+      "C-x t C-f" 'treemacs-find-tag)
+
 
 ;; Visual elements
-(setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 14))
+(setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 13))
 (setq doom-themes-treemacs-theme "doom-colors")
-(setq treemacs-width 30)
-
-
-;; Config for treemacs
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
-
-
-;; Config for projectile
-(projectile-add-known-project "~/code/personal/hip-system")
