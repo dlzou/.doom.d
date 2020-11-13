@@ -60,19 +60,41 @@
           (lambda () (ibuffer-auto-mode)))
 (lsp-treemacs-sync-mode)
 
+
 ;; Editor
 (setq-default fill-column 100)
+(setq-default word-wrap t)
 (blink-cursor-mode)
 (global-whitespace-mode)
 (setq whitespace-style
-      '(face tabs tab-mark spaces space-mark lines-tail))
+      '(face tabs tab-mark lines-tail))
 
 
-;; Global keybindings
-(map! "C-f" #'forward-word
-      "C-b" #'backward-word
-      "M-f" #'forward-char
-      "M-b" #'backward-char)
+;; Custom keybindings
+(defun my-forward-word ()
+  (interactive)
+  (if (looking-at "[])},]")
+      (forward-char)
+    (forward-word)))
+
+(defun my-backward-word ()
+  (interactive)
+  (if (looking-back "[[({,]")
+      (backward-char)
+    (backward-word)))
+
+(defun scroll-down-half ()
+  (interactive)
+  (scroll-down (/ (window-body-height) 2)))
+
+(defun scroll-up-half ()
+  (interactive)
+  (scroll-up (/ (window-body-height) 2)))
+
+(map! "M-f" #'my-forward-word
+      "M-b" #'my-backward-word
+      "M-p" #'scroll-down-half
+      "M-n" #'scroll-up-half)
 
 (map! "C-z"   #'undo-fu-only-undo
       "C-S-z" #'undo-fu-only-redo)
@@ -88,6 +110,12 @@
 (map! :map vterm-mode-map "C-c C-x" #'vterm-send-C-x)
 
 (windmove-default-keybindings 'control)
+
+
+;; Mode hooks
+(defun my-c-mode-common-hook ()
+  (setq indent-tabs-mode nil))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 
 ;; Visual elements
