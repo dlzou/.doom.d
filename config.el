@@ -80,9 +80,7 @@
   (interactive)
   (scroll-up (/ (window-body-height) 2)))
 
-(map! "M-f" #'my-forward-word
-      "M-b" #'my-backward-word
-      "M-p" #'scroll-down-half
+(map! "M-p" #'scroll-down-half
       "M-n" #'scroll-up-half)
 (map! :map Info-mode-map
       "M-n" nil
