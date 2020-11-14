@@ -67,11 +67,20 @@
 (blink-cursor-mode)
 (global-whitespace-mode)
 (setq whitespace-style
-      '(face tabs tab-mark lines-tail))
-(setq whitespace-line-column 100)
+      '(face tabs tab-mark))
 
 
 ;; Custom keybindings
+(defun split-window-vert-goto ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1))
+
+(defun split-window-hor-goto ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1))
+
 (defun scroll-down-half ()
   (interactive)
   (scroll-down (/ (window-body-height) 2)))
@@ -80,7 +89,9 @@
   (interactive)
   (scroll-up (/ (window-body-height) 2)))
 
-(map! "M-p" #'scroll-down-half
+(map! "C-x 2" #'split-window-vert-goto
+      "C-x 3" #'split-window-hor-goto
+      "M-p" #'scroll-down-half
       "M-n" #'scroll-up-half)
 (map! :map Info-mode-map
       "M-n" nil
@@ -88,8 +99,11 @@
 
 (map! "C-z"   #'undo-fu-only-undo
       "C-S-z" #'undo-fu-only-redo)
-(after! undo-fu
-  (map! :map undo-fu-mode-map "C-/" #'undo))
+(map! :map undo-fu-mode-map
+      [remap undo] nil)
+
+(map! :map dired-mode-map
+      "f" #'find-file)
 
 (map! "M-0"       #'treemacs-select-window
       "C-x t t"   #'treemacs
@@ -103,9 +117,14 @@
 
 
 ;; Mode hooks
-(defun my-c-mode-common-hook ()
-  (setq indent-tabs-mode nil))
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(defun my-coding-hook ()
+  (setq indent-tabs-mode nil)
+  (display-fill-column-indicator-mode)
+  (setq whitespace-style
+      '(face tabs tab-mark trailing)))
+(add-hook 'c-mode-common-hook #'my-coding-hook)
+(add-hook 'python-mode-hook #'my-coding-hook)
+(add-hook 'emacs-lisp-mode-hook #'my-coding-hook)
 
 
 ;; Visual elements
@@ -115,7 +134,6 @@
 
 
 ;; Anaconda
-(require 'conda)
 (custom-set-variables
  '(conda-anaconda-home (expand-file-name "~/anaconda3/")))
 (setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
