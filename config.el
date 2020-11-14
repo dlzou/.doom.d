@@ -68,21 +68,10 @@
 (global-whitespace-mode)
 (setq whitespace-style
       '(face tabs tab-mark lines-tail))
+(setq whitespace-line-column 100)
 
 
 ;; Custom keybindings
-(defun my-forward-word ()
-  (interactive)
-  (if (looking-at "[])},]")
-      (forward-char)
-    (forward-word)))
-
-(defun my-backward-word ()
-  (interactive)
-  (if (looking-back "[[({,]")
-      (backward-char)
-    (backward-word)))
-
 (defun scroll-down-half ()
   (interactive)
   (scroll-down (/ (window-body-height) 2)))
@@ -95,6 +84,9 @@
       "M-b" #'my-backward-word
       "M-p" #'scroll-down-half
       "M-n" #'scroll-up-half)
+(map! :map Info-mode-map
+      "M-n" nil
+      "M-c" #'clone-buffer)
 
 (map! "C-z"   #'undo-fu-only-undo
       "C-S-z" #'undo-fu-only-redo)
