@@ -56,6 +56,7 @@
 
 ;; Basic setup
 (exec-path-from-shell-initialize)
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-hook 'ibuffer-mode-hook
           (lambda () (ibuffer-auto-mode)))
 (lsp-treemacs-sync-mode)
@@ -64,10 +65,10 @@
 ;; Editor
 (setq-default fill-column 100)
 (setq-default word-wrap t)
-(blink-cursor-mode)
-(global-whitespace-mode)
 (setq whitespace-style
       '(face tabs tab-mark))
+(blink-cursor-mode)
+(global-whitespace-mode)
 
 
 ;; Custom keybindings
@@ -116,24 +117,33 @@
 (windmove-default-keybindings 'control)
 
 
-;; Mode hooks
-(defun my-coding-hook ()
-  (setq indent-tabs-mode nil)
-  (display-fill-column-indicator-mode)
-  (setq whitespace-style
-      '(face tabs tab-mark trailing)))
-(add-hook 'c-mode-common-hook #'my-coding-hook)
-(add-hook 'python-mode-hook #'my-coding-hook)
-(add-hook 'emacs-lisp-mode-hook #'my-coding-hook)
-
-
 ;; Visual elements
-(setq doom-font (font-spec :family "Iosevka"))
+(setq doom-font (font-spec :family "Iosevka" :size 17))
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 13))
 (setq doom-themes-treemacs-theme "doom-colors")
 
 
+;; Projectile
+(setq projectile-enable-caching nil)
+(setq projectile-indexing-method 'alien)
+
+
 ;; Anaconda
-(custom-set-variables
- '(conda-anaconda-home (expand-file-name "~/anaconda3/")))
+(setq conda-anaconda-home (expand-file-name "~/anaconda3/"))
 (setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
+(defun my-conda-hook ()
+  (if (projectile-project-p)
+    (conda-env-activate-for-buffer)))
+(add-hook 'python-mode-hook #'my-conda-hook)
+
+
+;; Mode hooks
+(defun my-coding-hook ()
+  (setq indent-tabs-mode nil)
+  (setq whitespace-style
+        '(face tabs tab-mark trailing))
+  (display-fill-column-indicator-mode))
+
+(add-hook 'c-mode-common-hook #'my-coding-hook)
+(add-hook 'python-mode-hook #'my-coding-hook)
+(add-hook 'emacs-lisp-mode-hook #'my-coding-hook)
