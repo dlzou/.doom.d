@@ -57,18 +57,17 @@
 ;; Basic setup
 (exec-path-from-shell-initialize)
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(add-hook 'ibuffer-mode-hook
-          (lambda () (ibuffer-auto-mode)))
 (lsp-treemacs-sync-mode)
 
 
 ;; Editor
 (setq-default fill-column 100)
 (setq-default word-wrap t)
+(blink-cursor-mode)
+
+(global-whitespace-mode)
 (setq whitespace-style
       '(face tabs tab-mark))
-(blink-cursor-mode)
-(global-whitespace-mode)
 
 
 ;; Custom keybindings
@@ -131,19 +130,37 @@
 ;; Anaconda
 (setq conda-anaconda-home (expand-file-name "~/anaconda3/"))
 (setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
-(defun my-conda-hook ()
-  (if (projectile-project-p)
-    (conda-env-activate-for-buffer)))
-(add-hook 'python-mode-hook #'my-conda-hook)
 
 
 ;; Mode hooks
-(defun my-coding-hook ()
+(defun coding-hook ()
   (setq indent-tabs-mode nil)
+  (setq tab-width 4)
+  (display-fill-column-indicator-mode)
   (setq whitespace-style
-        '(face tabs tab-mark trailing))
-  (display-fill-column-indicator-mode))
+        '(face tabs tab-mark trailing)))
 
-(add-hook 'c-mode-common-hook #'my-coding-hook)
-(add-hook 'python-mode-hook #'my-coding-hook)
-(add-hook 'emacs-lisp-mode-hook #'my-coding-hook)
+(defun coding-narrow-hook ()
+  (coding-hook)
+  (setq tab-width 2))
+
+(defun hide-whitespace-hook ()
+  (setq whitespace-style nil))
+
+(add-hook 'ibuffer-mode-hook #'hide-whitespace-hook)
+(add-hook 'ibuffer-mode-hook
+          (lambda () (ibuffer-auto-mode)))
+
+(add-hook 'vterm-mode-hook #'hide-whitespace-hook)
+
+(add-hook 'c-mode-common-hook #'coding-hook)
+(add-hook 'c-mode-common-hook
+          (lambda () (setq ccls-enable-skipped-ranges f)))
+
+(add-hook 'python-mode-hook #'coding-hook)
+(add-hook 'python-mode-hook
+          (lambda () (conda-env-activate-for-buffer)))
+
+(add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
+
+(add-hook 'json-mode-hook #'coding-narrow-hook)
