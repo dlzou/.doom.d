@@ -29,7 +29,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/code/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -155,11 +155,15 @@
 
 (add-hook 'c-mode-common-hook #'coding-hook)
 (add-hook 'c-mode-common-hook
-          (lambda () (setq ccls-enable-skipped-ranges f)))
+          (lambda () (setq ccls-enable-skipped-ranges nil)))
 
 (add-hook 'python-mode-hook #'coding-hook)
 (add-hook 'python-mode-hook
-          (lambda () (conda-env-activate-for-buffer)))
+          (lambda ()
+            (hack-dir-local-variables)
+            (if (assoc 'conda-project-env-path file-local-variables-alist)
+                (conda-env-activate-for-buffer)
+              (conda-env-activate))))
 
 (add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
 
