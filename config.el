@@ -29,7 +29,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/code/org/")
+(setq org-directory "~/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -61,8 +61,8 @@
 
 
 ;; Editor
-(setq-default fill-column 100)
 (setq-default word-wrap t)
+(setq-default fill-column 100)
 (blink-cursor-mode)
 
 (global-whitespace-mode)
@@ -122,6 +122,10 @@
 (setq doom-themes-treemacs-theme "doom-colors")
 
 
+;; Org
+(setq org-agenda-files '("~/org/agenda/"))
+
+
 ;; Projectile
 (setq projectile-enable-caching nil)
 (setq projectile-indexing-method 'alien)
@@ -136,6 +140,7 @@
 (defun coding-hook ()
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
+  (setq lsp-enable-indentation nil)
   (display-fill-column-indicator-mode)
   (setq whitespace-style
         '(face tabs tab-mark trailing)))
@@ -155,15 +160,18 @@
 
 (add-hook 'c-mode-common-hook #'coding-hook)
 (add-hook 'c-mode-common-hook
-          (lambda () (setq ccls-enable-skipped-ranges nil)))
+          (lambda ()
+            (setq ccls-enable-skipped-ranges nil)
+            (c-set-style "stroustrup")
+            (setq indent-region-function #'c-indent-region)))
 
 (add-hook 'python-mode-hook #'coding-hook)
 (add-hook 'python-mode-hook
           (lambda ()
             (hack-dir-local-variables)
-            (if (assoc 'conda-project-env-path file-local-variables-alist)
-                (conda-env-activate-for-buffer)
-              (conda-env-activate))))
+            (when (assoc 'conda-project-env-path file-local-variables-alist)
+                (conda-env-activate-for-buffer))
+            (setq indent-region-function #'python-indent-region)))
 
 (add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
 
