@@ -54,6 +54,10 @@
 (package! exec-path-from-shell)
 
 
+;; Notifications from org-mode
+(package! org-alert)
+
+
 ;; LSP-treemacs integration
 (package! lsp-treemacs)
 

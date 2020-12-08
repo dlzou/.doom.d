@@ -123,7 +123,25 @@
 
 
 ;; Org
+(require 'org-alert)
 (setq org-agenda-files '("~/org/agenda/"))
+(setq alert-default-style 'libnotify)
+(org-alert-enable)
+(setq org-agenda-custom-commands
+      '(("c" "Custom agenda view"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'done))
+                 (org-agenda-overriding-header "High priority items:")))
+          (agenda "" ((org-agenda-start-day "0d")
+                      (org-agenda-span 1)
+                      (org-agenda-overriding-header "Today's agenda:")))
+          (agenda "" ((org-agenda-start-day "+1d")
+                      (org-agenda-span 7)))
+          (tags "DEADLINE<\"<today>\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'done))
+                 (org-agenda-overriding-header "Overdue items:")))
+          (alltodo "" ((org-agenda-todo-ignore-with-date t)
+                       (org-agenda-overriding-header "Undated items:")))))))
 
 
 ;; Projectile
