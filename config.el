@@ -70,127 +70,15 @@
       '(face tabs tab-mark))
 
 
-;; Custom keybindings
-(defun split-window-vert-goto ()
-  (interactive)
-  (split-window-vertically)
-  (other-window 1))
-
-(defun split-window-hor-goto ()
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1))
-
-(defun scroll-down-half ()
-  (interactive)
-  (scroll-down (/ (window-body-height) 2)))
-
-(defun scroll-up-half ()
-  (interactive)
-  (scroll-up (/ (window-body-height) 2)))
-
-(map! "C-x 2" #'split-window-vert-goto
-      "C-x 3" #'split-window-hor-goto
-      "M-p" #'scroll-down-half
-      "M-n" #'scroll-up-half)
-(map! :map Info-mode-map
-      "M-n" nil
-      "M-c" #'clone-buffer)
-
-(map! "C-z"   #'undo-fu-only-undo
-      "C-S-z" #'undo-fu-only-redo)
-(map! :map undo-fu-mode-map
-      [remap undo] nil)
-
-(map! :map dired-mode-map
-      "f" #'find-file)
-
-(map! "M-0"       #'treemacs-select-window
-      "C-x t t"   #'treemacs
-      "C-x t b"   #'treemacs-bookmark
-      "C-x t f"   #'treemacs-find-file
-      "C-x t C-f" #'treemacs-find-tag)
-
-(map! :map vterm-mode-map "C-c C-x" #'vterm-send-C-x)
-
-(windmove-default-keybindings 'control)
-
-
 ;; Visual elements
 (setq doom-font (font-spec :family "Iosevka" :size 17))
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 13))
 (setq doom-themes-treemacs-theme "doom-colors")
 
 
-;; Org
-(require 'org-alert)
-(setq org-agenda-files '("~/org/agenda/"))
-(setq alert-default-style 'libnotify)
-(org-alert-enable)
-(setq org-agenda-custom-commands
-      '(("c" "Custom agenda view"
-         ((tags "PRIORITY=\"A\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'done))
-                 (org-agenda-overriding-header "High priority items:")))
-          (agenda "" ((org-agenda-start-day "0d")
-                      (org-agenda-span 1)
-                      (org-agenda-overriding-header "Today's agenda:")))
-          (agenda "" ((org-agenda-start-day "+1d")
-                      (org-agenda-span 7)))
-          (tags "DEADLINE<\"<today>\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'done))
-                 (org-agenda-overriding-header "Overdue items:")))
-          (alltodo "" ((org-agenda-todo-ignore-with-date t)
-                       (org-agenda-overriding-header "Undated items:")))))))
+;; My keybindings
+(load-file "~/.doom.d/keybindings.el")
 
 
-;; Projectile
-(setq projectile-enable-caching nil)
-(setq projectile-indexing-method 'alien)
-
-
-;; Anaconda
-(setq conda-anaconda-home (expand-file-name "~/anaconda3/"))
-(setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
-
-
-;; Mode hooks
-(defun coding-hook ()
-  (setq indent-tabs-mode nil)
-  (setq tab-width 4)
-  (setq lsp-enable-indentation nil)
-  (display-fill-column-indicator-mode)
-  (setq whitespace-style
-        '(face tabs tab-mark trailing)))
-
-(defun coding-narrow-hook ()
-  (coding-hook)
-  (setq tab-width 2))
-
-(defun hide-whitespace-hook ()
-  (setq whitespace-style nil))
-
-(add-hook 'ibuffer-mode-hook #'hide-whitespace-hook)
-(add-hook 'ibuffer-mode-hook
-          (lambda () (ibuffer-auto-mode)))
-
-(add-hook 'vterm-mode-hook #'hide-whitespace-hook)
-
-(add-hook 'c-mode-common-hook #'coding-hook)
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (setq ccls-enable-skipped-ranges nil)
-            (c-set-style "stroustrup")
-            (setq indent-region-function #'c-indent-region)))
-
-(add-hook 'python-mode-hook #'coding-hook)
-(add-hook 'python-mode-hook
-          (lambda ()
-            (hack-dir-local-variables)
-            (when (assoc 'conda-project-env-path file-local-variables-alist)
-                (conda-env-activate-for-buffer))
-            (setq indent-region-function #'python-indent-region)))
-
-(add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
-
-(add-hook 'json-mode-hook #'coding-narrow-hook)
+;; My mode settings
+(load "~/.doom.d/modes.el")
