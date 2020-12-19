@@ -77,7 +77,7 @@
 
 
 ;; My keybindings
-(load-file "~/.doom.d/keybindings.el")
+(load "~/.doom.d/keybindings.el")
 
 
 ;; My mode settings

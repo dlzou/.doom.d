@@ -60,7 +60,7 @@
 (add-hook 'python-mode-hook #'coding-hook)
 (add-hook 'python-mode-hook
           (lambda ()
-            (hack-dir-local-variables)
+            (hack-local-variables)
             (when (assoc 'conda-project-env-path file-local-variables-alist)
                 (conda-env-activate-for-buffer))
             (setq indent-region-function #'python-indent-region)))
