@@ -65,6 +65,8 @@
                 (conda-env-activate-for-buffer))
             (setq indent-region-function #'python-indent-region)))
 
+(add-hook 'rustic-mode-hook #'coding-hook)
+
 (add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
 
 (add-hook 'json-mode-hook #'coding-narrow-hook)
