@@ -33,6 +33,7 @@
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (setq lsp-enable-indentation nil)
+  (setq lsp-ui-doc-enable nil)
   (display-fill-column-indicator-mode)
   (setq whitespace-style
         '(face tabs tab-mark trailing)))
