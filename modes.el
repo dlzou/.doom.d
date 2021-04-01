@@ -28,6 +28,10 @@
 (setq conda-env-home-directory (expand-file-name "~/anaconda3/"))
 
 
+;; LaTeX
+(seq +latex-viewers '(pdf-tools))
+
+
 ;; Mode hooks
 (defun coding-hook ()
   (setq indent-tabs-mode nil)
