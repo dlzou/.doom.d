@@ -63,6 +63,8 @@
 ;; Editor
 (setq-default word-wrap t)
 (setq-default fill-column 100)
+(setq-default bidi-paragraph-direction 'left-to-right)
+(global-so-long-mode t)
 (blink-cursor-mode)
 
 (global-whitespace-mode)
@@ -74,6 +76,9 @@
 (setq doom-font (font-spec :family "Iosevka" :size 17))
 (setq doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 13))
 (setq doom-themes-treemacs-theme "doom-colors")
+(setq lsp-diagnostics-attributes '((deprecated :strike-thorugh t)))
+(custom-set-faces!
+  `(lsp-lsp-flycheck-info-unnecessary-face :foreground ,(face-foreground 'default)))
 
 
 ;; My keybindings

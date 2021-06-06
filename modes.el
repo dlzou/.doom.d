@@ -29,7 +29,7 @@
 
 
 ;; LaTeX
-(seq +latex-viewers '(pdf-tools))
+(setq +latex-viewers '(pdf-tools))
 
 
 ;; Mode hooks
