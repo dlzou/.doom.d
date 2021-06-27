@@ -54,10 +54,6 @@
 (package! exec-path-from-shell)
 
 
-;; Magit dependency
-;; (package! magit-section)
-
-
 ;; LSP-treemacs integration
 (package! lsp-treemacs)
 
