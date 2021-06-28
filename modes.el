@@ -72,6 +72,8 @@
 
 (add-hook 'rustic-mode-hook #'coding-hook)
 
+(add-hook 'go-mode-hook #'coding-hook)
+
 (add-hook 'emacs-lisp-mode-hook #'coding-narrow-hook)
 
 (add-hook 'json-mode-hook #'coding-narrow-hook)
