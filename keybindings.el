@@ -8,18 +8,18 @@
   (split-window-horizontally)
   (other-window 1))
 
-(defun scroll-down-half ()
+(defun backward-line-half ()
   (interactive)
-  (scroll-down (/ (window-body-height) 2)))
+  (forward-line (/ (window-body-height) -2)))
 
-(defun scroll-up-half ()
+(defun forward-line-half ()
   (interactive)
-  (scroll-up (/ (window-body-height) 2)))
+  (forward-line (/ (window-body-height) 2)))
 
 (map! "C-x 2" #'split-window-vert-goto
       "C-x 3" #'split-window-hor-goto
-      "M-p" #'scroll-down-half
-      "M-n" #'scroll-up-half)
+      "M-p" #'backward-line-half
+      "M-n" #'forward-line-half)
 (map! :map Info-mode-map
       "M-n" nil
       "M-c" #'clone-buffer)
